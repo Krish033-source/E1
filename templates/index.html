@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <title>CyberTotalX — E1 Watchdog</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="E1 Watchdog home">
+      <div class="logo">E1</div><div><div class="eyebrow">CYBERTOTALX</div><h1>WATCHDOG</h1></div>
+    </a>
+    <span class="mode-pill">WEBSITE SECURITY INTELLIGENCE</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div><div class="eyebrow">SECURITY POSTURE · ATTACK SURFACE · CONTINUOUS REVIEW</div>
+        <h2>Understand the security posture of a website.</h2>
+        <p>Discover observable attack surface, inspect security configuration, and turn evidence into actionable findings.</p>
+      </div>
+      <aside class="hero-card"><span>ENGINE STATUS</span><strong><i></i> READY</strong><small>Non-destructive external assessment</small></aside>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title"><span>01</span><div><h3>External Assessment</h3>
+        <p>Publicly observable checks only. Scan only websites you own or are authorized to assess.</p></div></div>
+      <form id="scanForm">
+        <div class="url-row"><input id="url" name="url" type="text" placeholder="https://example.com" autocomplete="url" required>
+          <button id="scanBtn" type="submit">Analyze Website <span>→</span></button></div>
+        <div class="scope-note"><span>✓</span> Basic SSRF guard · private targets blocked · redirects revalidated · responses size-capped</div>
+      </form>
+    </section>
+
+    <section class="panel deep-panel">
+      <div class="panel-title"><span>02</span><div><h3>Authorized Deep Assessment</h3>
+        <p>Structured review workflow requiring explicit authorization. No auth bypass, credential guessing or exploit payloads.</p></div></div>
+      <div class="deep-grid"><input id="deepUrl" type="text" placeholder="https://your-authorized-test-site.example">
+        <label class="authorize"><input id="authorize" type="checkbox"> I confirm I am authorized to assess this target.</label></div>
+      <div class="check-grid">
+        <label><input type="checkbox" value="api_inventory" checked> API inventory</label>
+        <label><input type="checkbox" value="auth_session_review" checked> Auth/session review</label>
+        <label><input type="checkbox" value="authorization_review"> Access-control review</label>
+        <label><input type="checkbox" value="sqli_safe_validation"> SQLi safe validation</label>
+        <label><input type="checkbox" value="xss_safe_validation"> XSS safe validation</label>
+        <label><input type="checkbox" value="data_exposure_review"> Data-exposure review</label>
+      </div>
+      <button id="deepBtn" class="secondary-btn" type="button">Run Authorized Review →</button>
+      <div id="deepResult" class="result-box hidden" aria-live="polite"></div>
+    </section>
+
+    <section class="panel lab-panel">
+      <div class="panel-title"><span>03</span><div><h3>Risk Simulation Lab</h3>
+        <p>Offline, synthetic scenarios. This lab makes zero network requests and never accesses a target.</p></div></div>
+      <div class="lab-grid">
+        <button class="lab-option" data-scenario="auth_bypass" type="button"><span class="lab-icon">A1</span><b>Auth / Access Bypass</b><small>Mock missing server-side authorization rule</small></button>
+        <button class="lab-option" data-scenario="credential_guessing" type="button"><span class="lab-icon">A2</span><b>Credential-Guessing Defense</b><small>Review rate-limit and lockout controls</small></button>
+        <button class="lab-option" data-scenario="database_exposure" type="button"><span class="lab-icon">A3</span><b>Database Exposure</b><small>Synthetic least-privilege review</small></button>
+        <button class="lab-option" data-scenario="destructive_exploitation" type="button"><span class="lab-icon">A4</span><b>Destructive-Test Safeguard</b><small>Dry-run safety gate</small></button>
+      </div>
+      <div id="labResult" class="result-box hidden" aria-live="polite"></div>
+    </section>
+
+    <section id="loading" class="loading hidden"><div class="spinner"></div><div><strong>Analyzing target...</strong><span>Checking transport, headers, public routes and JavaScript indicators.</span></div></section>
+    <section id="error" class="error hidden" role="alert"></section>
+
+    <section id="report" class="hidden">
+      <div class="report-head"><div><div class="eyebrow">SECURITY REPORT</div><h2 id="targetName">—</h2><p id="scanMeta">—</p></div><button id="downloadBtn" class="ghost" type="button">Download JSON</button></div>
+      <div class="score-grid">
+        <div class="score-card"><div class="score-ring"><span id="score">--</span><small>/100</small></div><div><b>Security posture</b><p>External evidence-based estimate, not certification.</p></div></div>
+        <div class="stat critical"><span>CRITICAL</span><b id="critical">0</b></div><div class="stat high"><span>HIGH</span><b id="high">0</b></div>
+        <div class="stat medium"><span>MEDIUM</span><b id="medium">0</b></div><div class="stat low"><span>LOW / INFO</span><b id="lowInfo">0</b></div>
+      </div>
+      <div class="two-col">
+        <div class="card"><div class="card-head"><h3>Target intelligence</h3><span id="statusBadge">—</span></div><div id="targetDetails" class="details"></div></div>
+        <div class="card"><div class="card-head"><h3>Coverage</h3><span id="pages">0 pages</span></div><div id="coverage" class="coverage"></div></div>
+      </div>
+      <div class="card findings-card"><div class="card-head"><h3>Findings</h3><span id="findingCount">0</span></div><div id="findings"></div></div>
+      <div class="two-col">
+        <div class="card"><div class="card-head"><h3>Tested</h3></div><ul id="tested" class="check-list"></ul></div>
+        <div class="card"><div class="card-head"><h3>Not tested</h3></div><ul id="notTested" class="muted-list"></ul></div>
+      </div>
+    </section>
+  </main>
+  <footer><span>CYBERTOTALX · E1 WATCHDOG</span><span>Use only on systems you own or are authorized to assess.</span></footer>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>
