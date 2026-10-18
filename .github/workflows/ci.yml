@@ -1,0 +1,36 @@
+name: E1 smoke checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Compile Python
+        run: python -m compileall -q app.py
+      - name: Smoke test Flask routes
+        run: |
+          python - <<'PY'
+          from app import app
+          client = app.test_client()
+          assert client.get("/").status_code == 200
+          assert client.post("/api/scan", json={}).status_code == 400
+          assert client.post("/api/deep-assessment", json={}).status_code == 400
+          for scenario in ("auth_bypass", "credential_guessing", "database_exposure", "destructive_exploitation"):
+              result = client.post("/api/lab-simulation", json={"scenario": scenario})
+              assert result.status_code == 200, (scenario, result.data)
+              body = result.get_json()
+              assert body["network_requests"] == 0
+              assert body["target_accessed"] is False
+          print("E1 smoke tests passed")
+          PY
